@@ -30,7 +30,7 @@ class CustomFlow(config_entries.ConfigFlow, domain=DOMAIN):
             if not self.data['check_ipv4'] and not self.data['check_ipv6']:
                 errors['base'] = 'nothing_selected'
             if not errors:
-                return self.async_create_entry(title="Ipify", data=self.data)
+                return self.async_create_entry(title="Ipify.org Public IP Check", data=self.data)
 
         return self.async_show_form(step_id="user", data_schema=CONFIG_SCHEMA, errors=errors)
 
@@ -56,7 +56,7 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
             if not self.data['check_ipv4'] and not self.data['check_ipv6']:
                 errors['base'] = 'nothing_selected'
             if not errors:
-                return self.async_create_entry(title="Ipify", data={'check_ipv4': user_input['check_ipv4'], 'check_ipv6': user_input['check_ipv6']})
+                return self.async_create_entry(title="Ipify.org Public IP Check", data={'check_ipv4': user_input['check_ipv4'], 'check_ipv6': user_input['check_ipv6']})
 
         default_ipv4 = True
         if 'check_ipv4' in self.config_entry.data:
