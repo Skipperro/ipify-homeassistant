@@ -1,6 +1,6 @@
 {
   "name": "Ipify.org Public IP Check",
-  "iot_class": "Local Polling",
+  "iot_class": "Cloud Polling",
   "render_readme": true,
   "zip_release": false
 }
