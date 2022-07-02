@@ -1,9 +1,8 @@
 """Platform for sensor integration."""
 from __future__ import annotations
 
-import asyncio
 import uuid
-from datetime import timedelta
+from datetime import timedelta, datetime
 from homeassistant.components.sensor import (SensorEntity)
 from homeassistant.core import HomeAssistant
 from homeassistant import config_entries
@@ -86,6 +85,7 @@ class IPSensor(SensorEntity):
         self._attr_icon = 'mdi:web'
         self._attr_name = "Public IPv4"
         self._attr_unique_id = str(uuid.uuid4())
+        self._attr_extra_state_attributes = {}
         if (self.ipv6):
             self._attr_name = "Public IPv6"
             self._attr_unique_id = str(uuid.uuid4())
@@ -99,10 +99,15 @@ class IPSensor(SensorEntity):
 
         # Get the IP address from the API
         try:
+            starttime = datetime.now()
             async with aiohttp.ClientSession() as session:
                 async with session.get(url) as response:
+                    self._attr_extra_state_attributes['response_time_ms'] = (datetime.now() - starttime).microseconds//1000
+                    self._attr_extra_state_attributes['status_code'] = response.status
+                    self._attr_extra_state_attributes['last_check'] = datetime.now()
                     if response.status == 200:
                         data = await response.json()
+                        self._attr_extra_state_attributes['data'] = data
                         if not 'ip' in data:
                             self._attr_native_value = None
                             _LOGGER.warning(f"No IP address in response: {data}")
@@ -118,8 +123,12 @@ class IPSensor(SensorEntity):
                                 self._attr_native_value = ip
                     else:
                         self._state = "Error"
+                        self._attr_extra_state_attributes['data'] = None
                         _LOGGER.error(f"Error {response.status} while getting IP")
         except Exception as e:
             _LOGGER.error(f'{e}')
             self._state = 'Error'
             self._attr_native_value = None
+            self._attr_extra_state_attributes['response_time_ms'] = None
+            self._attr_extra_state_attributes['status_code'] = None
+            self._attr_extra_state_attributes['last_check'] = datetime.now()
