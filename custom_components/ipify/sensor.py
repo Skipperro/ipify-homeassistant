@@ -6,6 +6,8 @@ from datetime import timedelta, datetime
 from homeassistant.components.sensor import (SensorEntity)
 from homeassistant.core import HomeAssistant
 from homeassistant import config_entries
+from homeassistant.helpers.device_registry import DeviceEntryType
+from homeassistant.helpers.entity import DeviceInfo
 from homeassistant.helpers.entity_registry import async_get, async_entries_for_config_entry
 from custom_components.ipify.const import DOMAIN
 import aiohttp
@@ -89,6 +91,13 @@ class IPSensor(SensorEntity):
         if (self.ipv6):
             self._attr_name = "Public IPv6"
             self._attr_unique_id = str(uuid.uuid4())
+
+        self._attr_device_info = DeviceInfo(
+            entry_type=DeviceEntryType.SERVICE,
+            identifiers={(DOMAIN)},
+            sw_version="0.3.0",
+            name="Ipify",
+        )
 
     async def async_update(self) -> None:
         """Fetch new state data for the sensor."""
