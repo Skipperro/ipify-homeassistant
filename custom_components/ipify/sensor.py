@@ -1,5 +1,4 @@
 """Platform for sensor integration."""
-"""Platform for sensor integration."""
 from __future__ import annotations
 
 import uuid
