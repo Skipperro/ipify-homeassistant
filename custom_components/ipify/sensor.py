@@ -95,7 +95,7 @@ class IPSensor(SensorEntity):
         self._attr_device_info = DeviceInfo(
             entry_type=DeviceEntryType.SERVICE,
             identifiers={(DOMAIN, 'ipify')},
-            sw_version="0.3.0",
+            sw_version="0.3.1",
             name="Ipify",
         )
 
