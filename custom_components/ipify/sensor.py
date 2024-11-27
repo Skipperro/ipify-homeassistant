@@ -1,4 +1,5 @@
 """Platform for sensor integration."""
+"""Platform for sensor integration."""
 from __future__ import annotations
 
 import uuid
@@ -94,7 +95,7 @@ class IPSensor(SensorEntity):
 
         self._attr_device_info = DeviceInfo(
             entry_type=DeviceEntryType.SERVICE,
-            identifiers={(DOMAIN)},
+            identifiers={(DOMAIN, 'ipify')},
             sw_version="0.3.0",
             name="Ipify",
         )
